@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
+import { sign } from "hono/jwt";
 
 const userRoute = new Hono<{
     Bindings: {
         DATABASE_URL: string
+        JWT_SECRET: string
     }
     Variables:{
         prisma: any
@@ -28,7 +30,9 @@ userRoute.post('/signup', async (c) => {
         password: body.password
     })
 
-    return c.json({id: user.id})
+    const token = sign({id: user.id}, c.env.JWT_SECRET)
+
+    return c.json({token: token})
 })
 
 userRoute.post('/signin', async (c) => {
@@ -40,30 +44,10 @@ userRoute.post('/signin', async (c) => {
             password: body.password
         }
     })
-    return c.json({id: user.id})
-})
 
-userRoute.get('/:id', async (c) => {
-    const prisma = c.get('prisma'); 
-    const id = c.req.param('id'); 
-
-    const blog = await prisma.blog.findOne({
-        where: {
-            id: id
-        }
-    })
-
-    return c.json({
-        blog: blog
-    })
-})
-
-userRoute.get('/bulk', async (c) => {
-    const prisma = c.get('prisma'); 
-
-    const blogs = prisma.blog.findMany({});
-    
-    return c.json({blogs: blogs})
+    const token = sign({id: user.id}, c.env.JWT_SECRET)
+ 
+    return c.json({token: token})
 }) 
 
 export default userRoute; 

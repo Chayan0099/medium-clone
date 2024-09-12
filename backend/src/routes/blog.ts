@@ -48,4 +48,24 @@ blogRoute.put('/:id', async (c) => {
     return c.text('Blog updated successfully')
 })
 
+blogRoute.get('/:id', async (c) => {
+    const prisma = c.get('prisma'); 
+    const id = c.req.param('id'); 
+    
+    const blog = await prisma.blog.findOne({
+        where: {
+            id: id
+        }
+    })
+
+    return c.json({blog: blog}); 
+})
+
+blogRoute.get('/bulk', async (c) => {
+    const prisma = c.get('prisma'); 
+    const blogs = await prisma.blog.findMany({}); 
+
+    return c.json({blogs: blogs}); 
+})
+
 export default blogRoute; 
