@@ -18,20 +18,22 @@ userRoute.use('/*', async (c, next)=>{
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     c.set("prisma", prisma); 
-    next(); 
+    await next(); 
 })
 
 userRoute.post('/signup', async (c) => {
     const prisma = c.get('prisma'); 
     const body = await c.req.json(); 
     const user = await prisma.user.create({
-        name: body.name,
-        email: body.email,
-        password: body.password
+        data:{
+            name: body.name,
+            email: body.email,
+            password: body.password
+        }
     })
 
-    const token = sign({id: user.id}, c.env.JWT_SECRET)
-
+    const token = await sign({id: user.id}, c.env.JWT_SECRET)
+    //localStorage.setItem('token', token); 
     return c.json({token: token})
 })
 
@@ -45,8 +47,8 @@ userRoute.post('/signin', async (c) => {
         }
     })
 
-    const token = sign({id: user.id}, c.env.JWT_SECRET)
- 
+    const token = await sign({id: user.id}, c.env.JWT_SECRET)
+    //localStorage.setItem('token', token); 
     return c.json({token: token})
 }) 
 

@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
+import { verify } from "hono/jwt";
 
 const blogRoute = new Hono<{
     Bindings: {
         DATABASE_URL: string
+        JWT_SECRET: string
     }
     Variables: {
         prisma: any
@@ -15,8 +17,19 @@ blogRoute.use('/*', async (c, next) => {
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
-    c.set("prisma", prisma); 
-    next(); 
+    c.set("prisma", prisma);
+ 
+    // const token = localStorage.getItem('token');
+    // if (token){
+    //  const success = verify(token, c.env.JWT_SECRET) 
+    //  if (!success) {
+    //     return c.text('auth failed')
+    //  }
+    // } 
+    // else {
+    //     return c.text('authentication failed')
+    // }
+    await next(); 
 })
 
 blogRoute.post('/createBlog', async (c) => {
