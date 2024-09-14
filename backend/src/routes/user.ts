@@ -40,7 +40,7 @@ userRoute.post('/signup', async (c) => {
 userRoute.post('/signin', async (c) => {
     const prisma = c.get('prisma'); 
     const body = await c.req.json(); 
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
         where: {
             email: body.email,
             password: body.password
