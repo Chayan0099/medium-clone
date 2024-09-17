@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
+import { signupschema, signinschema } from "chayan-medium-clone-common"
 
 const userRoute = new Hono<{
     Bindings: {
@@ -23,7 +24,13 @@ userRoute.use('/*', async (c, next)=>{
 
 userRoute.post('/signup', async (c) => {
     const prisma = c.get('prisma'); 
-    const body = await c.req.json(); 
+    const body = await c.req.json();
+    
+    const success = signupschema.safeParse(body); 
+    if(!success) {
+        return c.text('Wrong input')
+    }
+
     const user = await prisma.user.create({
         data:{
             name: body.name,
@@ -32,14 +39,19 @@ userRoute.post('/signup', async (c) => {
         }
     })
 
-    const token = await sign({id: user.id}, c.env.JWT_SECRET)
-    //localStorage.setItem('token', token); 
+    const token = await sign({id: user.id}, c.env.JWT_SECRET) 
     return c.json({token: token})
 })
 
 userRoute.post('/signin', async (c) => {
     const prisma = c.get('prisma'); 
     const body = await c.req.json(); 
+
+    const success = signinschema.safeParse(body);
+    if(!success) {
+        return c.text('wrong input')
+    }
+
     const user = await prisma.user.findUnique({
         where: {
             email: body.email,
@@ -48,7 +60,6 @@ userRoute.post('/signin', async (c) => {
     })
 
     const token = await sign({id: user.id}, c.env.JWT_SECRET)
-    //localStorage.setItem('token', token); 
     return c.json({token: token})
 }) 
 

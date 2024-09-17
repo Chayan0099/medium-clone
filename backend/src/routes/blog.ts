@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { decode, verify } from "hono/jwt";
+import { createblogschema, updateblogschema } from "chayan-medium-clone-common";
 
 const blogRoute = new Hono<{
     Bindings: {
@@ -18,17 +19,7 @@ blogRoute.use('/*', async (c, next) => {
     datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     c.set("prisma", prisma);
- 
-    // const token = localStorage.getItem('token');
-    // if (token){
-    //  const success = verify(token, c.env.JWT_SECRET) 
-    //  if (!success) {
-    //     return c.text('auth failed')
-    //  }
-    // } 
-    // else {
-    //     return c.text('authentication failed')
-    // }
+  
     const token = c.req.header("authorization"); 
     const success = verify(token || "", c.env.JWT_SECRET); 
     if (!success) {
@@ -40,6 +31,12 @@ blogRoute.use('/*', async (c, next) => {
 blogRoute.post('/createBlog', async (c) => {
     const prisma = c.get('prisma'); 
     const body = await c.req.json(); 
+
+    const success = createblogschema.safeParse(body); 
+    if(!success) {
+        return c.text("Wrong input")
+    }
+
     const token = c.req.header("authorization"); 
     const decoded = decode(token || "")
 
@@ -55,7 +52,13 @@ blogRoute.post('/createBlog', async (c) => {
 blogRoute.put('/:id', async (c) => {
     const prisma = c.get('prisma'); 
     const id = c.req.param('id'); 
-    const body = await c.req.json(); 
+    const body = await c.req.json();
+    
+    const success = updateblogschema.safeParse(body);
+    if(!success) {
+        return c.text('wrong input')
+    }   
+
     const blog = await  prisma.blog.update({
         where:{
             id: id
