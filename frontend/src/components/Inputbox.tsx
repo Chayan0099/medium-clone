@@ -1,8 +1,8 @@
-function Inputbox({boxname} :{boxname:string}){
-    return <div className="h-screen bg-blue-200 flex justify-center items-center">
-     <div className="flex flex-col p-5 justify- ">
-        <div className="text-xl">{boxname}</div>
-        <input type='text' placeholder="Enter Username"></input> 
+function Inputbox({boxname, boxtype} :{boxname:string, boxtype:string}){
+    return <div>
+     <div className="flex flex-col ">
+        <div className="text-2xl font-bold font-serif p-3">{boxname}</div>
+        <input className="text-2xl border-2 border-gray-200 rounded-lg p-2 font-serif"type={boxtype} placeholder={`Enter your ${boxname}`}></input> 
     </div>
 </div>
 }
