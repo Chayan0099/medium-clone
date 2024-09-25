@@ -1,0 +1,19 @@
+ .ProseMirror p.is-editor-empty:first-child::before {
+  content: "Tell Your Story";
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
+ }
+
+h1 {
+  font-size: xx-large;
+  font-weight: bolder;
+}  
+h3 { 
+    font-size: x-large;
+    font-weight: 500;     
+  }
+
+
+ 
