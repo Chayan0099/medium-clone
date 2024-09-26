@@ -8,6 +8,7 @@ import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useState } from 'react';
 import './style.css'; 
+import Topbar from '../components/Topbar';
 
 const Editor:React.FC = () => {
   const editor = useEditor({
@@ -31,7 +32,10 @@ const Editor:React.FC = () => {
     content: '',
   });
 
-  return (<div className='flex justify-center'>
+  return (
+  <div>
+    <Topbar publish={true}></Topbar>
+  <div className='flex justify-center'>
     <div className='max-w-screen-md '>
       <div className='pt-5'>
         <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none'></input>
@@ -48,6 +52,7 @@ const Editor:React.FC = () => {
       }
       <EditorContent editor={editor}/>
   </div>
+</div>
 </div>
   );
 };
