@@ -6,7 +6,6 @@ import Link from '@tiptap/extension-link';
 import Heading from '@tiptap/extension-heading';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
-import { useState } from 'react';
 import './style.css'; 
 import Topbar from '../components/Topbar';
 
