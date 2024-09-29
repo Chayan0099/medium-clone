@@ -5,6 +5,7 @@ import Sidecard from "../components/Sidecard";
 import { useState } from "react";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Singup() {
     const [password, setPassword] = useState<string>('');
@@ -18,7 +19,23 @@ function Singup() {
         <Inputbox boxtype="text" boxname="Username" invalue={username} setInvalue={setUsername}></Inputbox>
         <Inputbox boxtype="text" boxname="Email" invalue={email} setInvalue={setEmail}></Inputbox>
         <PasswordInput password={password} setPassword={setPassword} ></PasswordInput>
-        <Button label='Sign Up' onclick={() => {console.log(password)}}></Button>
+        <Button label='Sign Up' onclick={async () => {
+            try{
+                const {data} = await axios.post('https://blog-post.chayansarkar2003.workers.dev/api/v1/user/signup', 
+                {
+                    name:username,
+                    email:email,
+                    password:password
+                }
+            )
+            localStorage.setItem('token', data.token); 
+            navigate("../");
+            }
+            catch(e) {
+                alert('Wrong Credentials')
+            }
+             
+        }}></Button>
         </div>
         <div className="hidden md:block md:flex md:justify-center bg-gray-200">
             <Sidecard></Sidecard>
