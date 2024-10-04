@@ -1,37 +1,52 @@
-import axios from "axios";
-import Topbar from "../components/Topbar";
-import { useNavigate } from "react-router-dom";
-type blogtype = {
+import axios from 'axios'; 
+import { useEffect, useState } from 'react';
+import Topbar from '../components/Topbar';
+
+type BlogType = {
+    id:string,
     title:string,
-    content:string
+    content:string,
+    authorId:string
 }
 
-async function Blog (){
-    const navigate = useNavigate(); 
+type Arrayof<T> = T[]; 
+
+function Blog() {
+return <div>
+<Topbar publish={false}></Topbar>
+<RenderBlogs></RenderBlogs>
+</div>
+}
+
+function RenderBlogs() {
+    const [blogs, setBlogs] = useState<Arrayof<BlogType>>(); 
     const token = localStorage.getItem('token'); 
-    const {data} = await axios.get('https://blog-post.chayansarkar2003.workers.dev/api/v1/blog', {
-        headers:{
-            authorization: token
-        }
-    })
-    const blogs = data.blogs; 
-    if(!token) {
-        navigate('/signup')
-    } else { 
-        return <div>
-        <Topbar publish={false}></Topbar>
-        <div>
-            {blogs.map((blog:blogtype) => {<SingleBlog title={blog.title} content={blog.content}></SingleBlog>})}
+    useEffect(() => {
+       axios.get('http://localhost:8787/api/v1/blog/bulk', 
+        {headers:{
+            'Authorization':token
+        }}
+       ).then((res) => {
+        setBlogs(res.data.blogs)
+       }).catch((err) => {
+        console.log(err)
+       })
+    },[]); 
+   
+    if(blogs) {
+        const items = blogs.map(blog => <div className=' m-5 p-5 font-serif hover:bg-gray-200 flex flex-col self-start rounded-lg max-w-screen-md'>
+            <div className='font-bold text-3xl'>{blog.title}</div>
+            <div className='text-lg'>{blog.content}</div>
+        </div>)
+        return <div className='flex flex-col items-center'>
+            {items}
         </div>
-    </div>
+    } else {
+        return <div>
+            No Blogs here
+        </div>
     }
-}
 
-function SingleBlog({title, content}:{title:string, content:string}) {
-    return <div>
-        <div>{title}</div>
-        <div>{content}</div>
-    </div>
-}
+   }
 
 export default Blog; 
