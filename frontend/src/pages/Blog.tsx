@@ -1,8 +1,9 @@
 import axios from 'axios'; 
 import { useEffect, useState } from 'react';
 import Topbar from '../components/Topbar';
+import { useNavigate } from 'react-router-dom';
 
-type BlogType = {
+export type BlogType = {
     id:string,
     title:string,
     content:string,
@@ -19,10 +20,11 @@ return <div>
 }
 
 function RenderBlogs() {
+    const naviagate = useNavigate(); 
     const [blogs, setBlogs] = useState<Arrayof<BlogType>>(); 
     const token = localStorage.getItem('token'); 
     useEffect(() => {
-       axios.get('http://localhost:8787/api/v1/blog/bulk', 
+       axios.get('https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/bulk', 
         {headers:{
             'Authorization':token
         }}
@@ -34,12 +36,16 @@ function RenderBlogs() {
     },[]); 
    
     if(blogs) {
-        const items = blogs.map(blog => <div className=' m-5 p-5 font-serif hover:bg-gray-200 flex flex-col self-start rounded-lg max-w-screen-md'>
+        const items = blogs.map(blog => <div onClick={() => {
+            naviagate(`/read/${blog.id}`)
+        }}className=' m-5 p-5 font-serif hover:bg-gray-200 flex flex-col rounded-lg max-w-screen-md'>
             <div className='font-bold text-3xl'>{blog.title}</div>
             <div className='text-lg'>{blog.content}</div>
         </div>)
         return <div className='flex flex-col items-center'>
+            <div>
             {items}
+            </div>
         </div>
     } else {
         return <div>
