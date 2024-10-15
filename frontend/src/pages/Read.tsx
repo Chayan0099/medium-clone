@@ -26,9 +26,11 @@ function Render(){
     },[])
 
     if(blog){
-        return <div>
-            <div>{blog.title}</div>
-            <div>{blog.content}</div>
+        return <div className="flex justify-center">
+            <div className="font-serif p-10 max-w-screen-lg">
+                <div className="text-5xl ">{blog.title}</div>
+                <div className="text-xl pl-2">{blog.content}</div>
+            </div>
         </div>
     }
     else{

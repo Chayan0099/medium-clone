@@ -8,8 +8,12 @@ import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import './style.css'; 
 import Topbar from '../components/Topbar';
+import { useState } from 'react';
 
 const Editor:React.FC = () => {
+  const [title, setTitle] = useState<string>(''); 
+  const [content, setContent] = useState<string>(''); 
+
   const editor = useEditor({
     editorProps:{
       attributes:{
@@ -17,27 +21,32 @@ const Editor:React.FC = () => {
     },
     extensions: [
       StarterKit,
-      Bold,
-      Italic,
       Underline, 
       Link.configure({
         openOnClick: true,
       }),
-      Heading.configure({
-        levels: [1, 2, 3], 
-      }),
       Placeholder,
+      Heading.configure({
+        levels:[1,3]
+      })
     ],
     content: '',
+    // onUpdate({editor}){
+    //   setContent(editor.getHTML); 
+    //   console.log(editor.getHTML)
+    // }
   });
 
   return (
   <div>
-    <Topbar publish={true}></Topbar>
+    <Topbar publish={true} title={title} content={content}></Topbar>
   <div className='flex justify-center'>
     <div className='max-w-screen-md '>
       <div className='pt-5'>
-        <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none'></input>
+        <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none' onChange={(e) =>{
+          console.log(e.target.value); 
+          setTitle(e.target.value); 
+        }}></input>
       </div>
       {editor && 
       <BubbleMenu className='font-serif flex bg-gray-300 gap-1 p-1 rounded-lg border-2 border-black' editor={editor} tippyOptions={{duration:100}}>
@@ -49,7 +58,7 @@ const Editor:React.FC = () => {
       <button className={`${editor.isActive('heading', {level:3})? 'bg-green-400 hover:bg-green-500' : ''} hover:bg-gray-400 px-3 py-2 rounded-lg`} onClick={() => editor?.chain().focus().toggleHeading({level: 3}).run()}>H3</button> 
       </BubbleMenu>
       }
-      <EditorContent editor={editor}/>
+      <EditorContent editor={editor} className='prose'/>
   </div>
 </div>
 </div>
