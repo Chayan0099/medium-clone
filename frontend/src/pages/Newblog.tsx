@@ -1,7 +1,5 @@
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
+import { useEditor, EditorContent, BubbleMenu, JSONContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
 import Link from '@tiptap/extension-link';
 import Heading from '@tiptap/extension-heading';
 import Underline from '@tiptap/extension-underline';
@@ -12,7 +10,7 @@ import { useState } from 'react';
 
 const Editor:React.FC = () => {
   const [title, setTitle] = useState<string>(''); 
-  const [content, setContent] = useState<string>(''); 
+  const [content, setContent] = useState<string>(); 
 
   const editor = useEditor({
     editorProps:{
@@ -31,15 +29,22 @@ const Editor:React.FC = () => {
       })
     ],
     content: '',
-    // onUpdate({editor}){
-    //   setContent(editor.getHTML); 
-    //   console.log(editor.getHTML)
-    // }
+    onUpdate({editor}){
+     const html = editor.getHTML(); 
+     function htmlDecode(content:any) {
+        let e = document.createElement('div');
+        e.innerHTML = content;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }; 
+    setContent(htmlDecode(html) || "")
+    console.log(html)
+    console.log(htmlDecode(html)); 
+    }
   });
 
   return (
   <div>
-    <Topbar publish={true} title={title} content={content}></Topbar>
+    <Topbar publish={true} title={title} content={content || ""}></Topbar>
   <div className='flex justify-center'>
     <div className='max-w-screen-md '>
       <div className='pt-5'>

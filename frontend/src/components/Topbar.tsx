@@ -1,3 +1,4 @@
+import { JSONContent } from "@tiptap/react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom"
 
@@ -15,18 +16,18 @@ const Topbar : React.FC<myProp> = ({publish, title, content}) =>
         <button onClick={() =>{<Link to='/'></Link>}} className="font-bold text-4xl font-serif">BlogPost</button>
         <div className="flex gap-10 text-lg">
             <div>
-                {publish === true? <button onClick={() => {
+                {publish === true? <button onClick={async () => {
                     const token = localStorage.getItem('token');  
-                    axios.post('https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/createBlog',{
+                    await axios.post('https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/createBlog',{
+                       title: title,
+                       content: content
+                    },
+                    {
                         headers:{
-                            'authorization': token
-                        }
-                    }, {
-                        data:{
-                            title: title ,
-                            content: content 
+                            'Authorization': token
                         }
                     })
+                    console.log('published')
                 }} className="bg-green-500 hover:bg-green-600 font-serif px-4 py-1 rounded-full">
                     Publish
                 </button> : <button onClick={() =>{navigate('/new-blog')}} className="font-serif px-4 py-1 bg-gray-200 hover:bg-gray-300 rounded-lg"> Write </button>}
