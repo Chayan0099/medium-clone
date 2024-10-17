@@ -36,7 +36,7 @@ function RenderBlogs() {
     },[]); 
    
     if(blogs) {
-        const items = blogs.map(blog => <div onClick={() => {
+        const items = blogs.map(blog => <div key={blog.id}onClick={() => {
             naviagate(`/read/${blog.id}`)
         }}className=' m-5 p-5 font-serif hover:bg-gray-200 flex flex-col rounded-lg max-w-screen-md'>
             <div className='font-bold text-3xl'>{blog.title}</div>
