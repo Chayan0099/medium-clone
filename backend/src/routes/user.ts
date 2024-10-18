@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
-import { sign } from "hono/jwt";
+import { decode, sign } from "hono/jwt";
 import { signupschema, signinschema } from "chayan-medium-clone-common"
 
 const userRoute = new Hono<{
@@ -62,5 +62,23 @@ userRoute.post('/signin', async (c) => {
     const token = await sign({id: user.id}, c.env.JWT_SECRET)
     return c.json({token: token})
 }) 
+
+userRoute.get('/getinfo', async (c) => {
+    const prisma = c.get('prisma'); 
+    const token = c.req.header('authorization'); 
+    if(!token){
+        return c.text('No token');
+    }
+    else {
+        const response = decode(token);
+        const data = response.payload;
+        const userInfo = await prisma.user.findUnique({
+            where:{
+                id:data.id
+            }
+        })
+        return c.json({info:userInfo}); 
+    }
+})
 
 export default userRoute; 
