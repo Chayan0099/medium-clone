@@ -79,6 +79,24 @@ blogRoute.get('/bulk', async (c) => {
     return c.json({blogs: blogs}); 
 })
 
+blogRoute.get('/myblogs', async(c) => {
+    const prisma = c.get('prisma');
+    const token = c.req.header('authorization');
+    if(token){
+        const id = decode(token);
+        const blogs = await prisma.blog.findMany({
+            where:{
+                authorId: id.payload.id
+            }
+        })
+        return c.json({blogs:blogs}); 
+    }
+    else {
+        return c.text('No token');
+    }
+
+})
+
 blogRoute.get('/:id', async (c) => {
     const prisma = c.get('prisma'); 
     const id = c.req.param('id'); 
