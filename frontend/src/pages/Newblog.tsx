@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, BubbleMenu, JSONContent } from '@tiptap/react';
+import { useEditor, EditorContent, BubbleMenu} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Heading from '@tiptap/extension-heading';
@@ -30,15 +30,8 @@ const Editor:React.FC = () => {
     ],
     content: '',
     onUpdate({editor}){
-     const html = editor.getHTML(); 
-     function htmlDecode(content:any) {
-        let e = document.createElement('div');
-        e.innerHTML = content;
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-    }; 
-    setContent(htmlDecode(html) || "")
-    console.log(html)
-    console.log(htmlDecode(html)); 
+      setContent(editor.getHTML()); 
+    ; 
     }
   });
 
@@ -48,8 +41,7 @@ const Editor:React.FC = () => {
   <div className='flex justify-center'>
     <div className='max-w-screen-md '>
       <div className='pt-5'>
-        <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none' onChange={(e) =>{
-          console.log(e.target.value); 
+        <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none' onChange={(e) =>{ 
           setTitle(e.target.value); 
         }}></input>
       </div>

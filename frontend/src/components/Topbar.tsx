@@ -2,13 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 
-interface myProp {
+interface TopbarProp {
     publish : boolean
     title: string
     content: string 
 }
 
-const Topbar : React.FC<myProp> = ({publish, title, content}) =>
+const Topbar : React.FC<TopbarProp> = ({publish, title, content}) =>
 {   
     const [ initial, setInitial] = useState<string>()
     const token = localStorage.getItem('token');
@@ -45,7 +45,9 @@ const Topbar : React.FC<myProp> = ({publish, title, content}) =>
                 </button> : <button onClick={() =>{navigate('/new-blog')}} className="font-serif px-4 py-1 bg-gray-200 hover:bg-gray-300 rounded-lg"> Write </button>}
             </div>
             <div>
-                <button className="font-serif py-1 px-3 rounded-full bg-gray-500 ">{initial? initial[0].toUpperCase() : "A"}</button>
+                <button className="font-serif py-1 px-3 rounded-full bg-gray-500 " onClick={() =>{
+                    navigate('/profile'); 
+                }}>{initial? initial[0].toUpperCase() : "A"}</button>
             </div>
         </div>
     </div>
