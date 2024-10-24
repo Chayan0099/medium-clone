@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Topbar from '../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 
- type BlogType = {
+export type BlogType = {
     id:string,
     title:string,
     content:string,
