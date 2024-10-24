@@ -75,8 +75,14 @@ userRoute.get('/getinfo', async (c) => {
         const userInfo = await prisma.user.findUnique({
             where:{
                 id:data.id
+            },
+            include:{
+                _count:{
+                    select:{ blogs : true}
+                }
             }
         })
+
         return c.json({info:userInfo}); 
     }
 })

@@ -3,8 +3,6 @@ import axios from "axios";
 import Topbar from "../components/Topbar";
 import { RenderBlogs } from "./Blog";
 
-type Arrayof<T> = T[]; 
-
 function Profile(){
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -12,11 +10,12 @@ function Profile(){
 
     const token = localStorage.getItem('token');
     useEffect(() => {
-        axios.get('https://blog-post.chayansarkar2003.workers.dev/api/v1/user/getinfo',{
+        axios.get('https://blog-post.chayansarkar2003.workers.dev./api/v1/user/getinfo',{
             headers:{
                 'Authorization':token
             }
         }).then((res) => {
+            setCount(res.data.info._count.blogs)
             setName(res.data.info.name);
             setEmail(res.data.info.email);
         })
