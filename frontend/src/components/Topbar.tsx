@@ -18,9 +18,8 @@ const Topbar : React.FC<TopbarProp> = ({publish, title, content}) =>
                     'Authorization':token
                 }
             }).then((res) => {
-                setInitial(res.data.info.name)
+                setInitial(res.data.info)
             }).catch((err) => {
-                console.log(err)
             })
         
     })

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { BlogType } from "./Blog";
 import Topbar from "../components/Topbar";
-import './style.css'; 
+import './style.css';
+import Navigator from "../components/Navigation"; 
 
 function Read() {
     return <div>
