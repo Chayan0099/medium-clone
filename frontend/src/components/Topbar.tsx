@@ -19,7 +19,7 @@ const Topbar : React.FC<TopbarProp> = ({publish, title, content}) =>
                 }
             }).then((res) => {
                 setInitial(res.data.info)
-            }).catch((err) => {
+            }).catch(() => {
             })
         
     })
