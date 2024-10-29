@@ -7,7 +7,7 @@ import './style.css';
 
 function Read() {
     return <div>
-        <Topbar publish={false} title="" content=""></Topbar>
+        <Topbar write={true}></Topbar>
         <Render></Render>
     </div>
 }

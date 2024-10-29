@@ -7,6 +7,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import './style.css'; 
 import Topbar from '../components/Topbar';
 import { useState } from 'react';
+import axios from 'axios';
 
 const Editor:React.FC = () => {
   const [title, setTitle] = useState<string>(''); 
@@ -36,8 +37,8 @@ const Editor:React.FC = () => {
   });
 
   return (
-  <div>
-    <Topbar publish={true} title={title} content={content || ""}></Topbar>
+  <div className=''>
+    <Topbar write={false}></Topbar>
   <div className='flex justify-center'>
     <div className='max-w-screen-md '>
       <div className='pt-5'>
@@ -58,6 +59,25 @@ const Editor:React.FC = () => {
       <EditorContent editor={editor} className='prose'/>
   </div>
 </div>
+      <button className='fixed right-48 bottom-32 bg-lime-400 text-3xl font-bold font-serif py-4 px-6 rounded-lg hover:bg-lime-600' onClick={() => {
+        const token = localStorage.getItem('token');
+        axios.post('https://blog-post.chayansarkar.workers.dev/api/v1/blog/createBlog', {
+          title,
+          content
+        }, {
+          headers:{
+            'Authorization': token
+          }
+        }).then((res) => {
+          if (res.data.id) {
+            alert("Blog publish")
+          }
+          else{
+            alert("Blog can't be published")
+          }
+        })
+        
+      }}>Publish</button>
 </div>
   );
 };

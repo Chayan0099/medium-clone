@@ -18,7 +18,7 @@ interface Renderblogtype {
 
 function Blog() {
 return <div>
-<Topbar publish={false} title='' content=''></Topbar>
+<Topbar write={true}></Topbar>
 <RenderBlogs fetchLink='https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/bulk'></RenderBlogs>
 </div>
 }

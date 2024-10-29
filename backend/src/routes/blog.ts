@@ -46,7 +46,12 @@ blogRoute.post('/createBlog', async (c) => {
         authorId: decoded.payload.id }
     })
 
-    return c.json({id: blog.id}); 
+    if(blog.id) {
+        return c.json({id:blog.id});
+    }
+    else {
+        return c.json({msg:"Can't publish blog"})
+    }
 })
 
 blogRoute.put('/:id', async (c) => {
