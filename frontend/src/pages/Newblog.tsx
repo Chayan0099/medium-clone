@@ -1,7 +1,6 @@
 import { useEditor, EditorContent, BubbleMenu} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import Heading from '@tiptap/extension-heading';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import './style.css'; 
@@ -19,15 +18,16 @@ const Editor:React.FC = () => {
         class:'focus:outline-none text-lg font-serif max-w-screen-md mt-5' }
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading:{
+          levels: [1,3]
+        }
+      }),
       Underline, 
       Link.configure({
         openOnClick: true,
       }),
       Placeholder,
-      Heading.configure({
-        levels:[1,3]
-      })
     ],
     content: '',
     onUpdate({editor}){
@@ -39,10 +39,10 @@ const Editor:React.FC = () => {
   return (
   <div className=''>
     <Topbar write={false}></Topbar>
-  <div className='flex justify-center'>
-    <div className='max-w-screen-md '>
+  <div className='flex justify-start pl-10 md:justify-center md:pl-0'>
+    <div className='max-w-screen-sm'>
       <div className='pt-5'>
-        <input type='text' placeholder='Title' className='font-bold text-6xl max-w-500 font-serif focus:outline-none' onChange={(e) =>{ 
+        <input type='text' placeholder='Title' className='flex flex-wrap font-bold text-6xl font-serif focus:outline-none' size={15} onChange={(e) =>{ 
           setTitle(e.target.value); 
         }}></input>
       </div>
@@ -59,7 +59,8 @@ const Editor:React.FC = () => {
       <EditorContent editor={editor} className='prose'/>
   </div>
 </div>
-      <button className='fixed right-48 bottom-32 bg-lime-400 text-3xl font-bold font-serif py-4 px-6 rounded-lg hover:bg-lime-600' onClick={() => {
+  <div className='fixed right-24 bottom-16'>
+      <button className='md:fixed right-48 bottom-32 bg-lime-400 text-3xl font-bold font-serif py-4 px-6 rounded-lg hover:bg-lime-600' onClick={() => {
         const token = localStorage.getItem('token');
         axios.post('https://blog-post.chayansarkar.workers.dev/api/v1/blog/createBlog', {
           title,
@@ -78,6 +79,7 @@ const Editor:React.FC = () => {
         })
         
       }}>Publish</button>
+    </div>
 </div>
   );
 };

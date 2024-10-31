@@ -32,8 +32,8 @@ function Render(){
     if(blog){ 
         return <div className="flex justify-center">
             <div className="font-serif p-10 max-w-screen-lg">
-                <div className="text-5xl ">{blog.title}</div>
-                <div className="prose text-xl pl-2" dangerouslySetInnerHTML={{__html:blog.content}}></div>
+                <div className="text-5xl font-bold">{blog.title}</div>
+                <div className="prose text-xl pl-1 mt-5" dangerouslySetInnerHTML={{__html:blog.content}}></div>
             </div>
         </div>
     }
