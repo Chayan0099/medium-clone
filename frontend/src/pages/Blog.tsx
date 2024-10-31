@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Topbar from '../components/Topbar';
 import { useNavigate } from 'react-router-dom';
+import SignBar from '../components/SignBar';
+import IsSignedup from '../components/IsSignedup';
 
 export type BlogType = {
     id:string,
@@ -17,7 +19,9 @@ interface Renderblogtype {
 }
 
 function Blog() {
+    const signedUp = IsSignedup(); 
 return <div>
+{signedUp == false? <SignBar></SignBar>:<></>}
 <Topbar write={true}></Topbar>
 <RenderBlogs fetchLink='https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/bulk'></RenderBlogs>
 </div>
@@ -52,7 +56,7 @@ export const RenderBlogs : React.FC <Renderblogtype> = ({fetchLink}) => {
             </div>
         </div>
     } else {
-        return <div>
+        return < div>
             No Blogs here
         </div>
     }
