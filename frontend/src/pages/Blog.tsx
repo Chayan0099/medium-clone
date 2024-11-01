@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Topbar from '../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 import SignBar from '../components/SignBar';
-import IsSignedup from '../components/IsSignedup';
+import {IsSignedup} from '../components/IsSignedup';
 
 export type BlogType = {
     id:string,
@@ -22,7 +22,7 @@ function Blog() {
     const signedUp = IsSignedup(); 
 return <div>
 {signedUp == false? <SignBar></SignBar>:<></>}
-<Topbar write={true}></Topbar>
+<Topbar write={signedUp}></Topbar>
 <RenderBlogs fetchLink='https://blog-post.chayansarkar2003.workers.dev/api/v1/blog/bulk'></RenderBlogs>
 </div>
 }

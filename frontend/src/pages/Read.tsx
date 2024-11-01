@@ -4,13 +4,20 @@ import axios from "axios";
 import { BlogType } from "./Blog";
 import Topbar from "../components/Topbar";
 import './style.css'; 
+import { IsSignedup, NotSigned } from "../components/IsSignedup";
 
 function Read() {
-    return <div>
-        <Topbar write={true}></Topbar>
-        <Render></Render>
-    </div>
-}
+    const signedUp = IsSignedup();
+    if(signedUp == false) {
+        return <NotSigned></NotSigned>
+    } else {
+        return <div>
+            <Topbar write={true}></Topbar>
+            <Render></Render>
+        </div>
+
+    }
+   }
 
 function Render(){
     const [blog, setBlog] = useState<BlogType>(); 
